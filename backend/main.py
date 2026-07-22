@@ -3,11 +3,59 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from datetime import datetime
-from database import engine, get_db
+import os
+from database import engine, get_db, SessionLocal
 import models, schemas
 from auth import verificar_password, hashear_password, crear_token, get_admin_actual
 
 models.Base.metadata.create_all(bind=engine)
+
+# ── SEED AUTOMÁTICO AL INICIAR ────────────────────
+def seed_database():
+    db = SessionLocal()
+    try:
+        # Crear admin SOLO si no existe
+        admin_existente = db.query(models.Usuario).filter(models.Usuario.email == 'admin@chuckybarbershop.com').first()
+        
+        if not admin_existente:
+            admin_password = os.getenv("ADMIN_PASSWORD", "Chucky2026!")
+            admin = models.Usuario(
+                nombre="Chucky Barber",
+                email="admin@chuckybarbershop.com",
+                password=hashear_password(admin_password),
+                es_admin=True
+            )
+            db.add(admin)
+            print("✅ Admin creado")
+        else:
+            print("ℹ️ Admin ya existe")
+        
+        # Crear servicios si no existen
+        servicios_existentes = db.query(models.Servicio).count()
+        if servicios_existentes == 0:
+            servicios = [
+                models.Servicio(nombre="Corte Clásico", descripcion="Corte tradicional con tijera y máquina", precio=150, duracion_min=30),
+                models.Servicio(nombre="Corte + Barba", descripcion="Combo completo: corte y arreglo de barba con navaja", precio=250, duracion_min=45),
+                models.Servicio(nombre="Arreglo de Barba", descripcion="Delineado y perfilado con navaja al ras", precio=120, duracion_min=20),
+                models.Servicio(nombre="Diseño y Rayas", descripcion="Diseños personalizados y rayas en el cabello", precio=180, duracion_min=40),
+                models.Servicio(nombre="Corte Premium", descripcion="Corte + barba + mascarilla + bebida", precio=350, duracion_min=60),
+                models.Servicio(nombre="Corte Infantil", descripcion="Corte para los pequeños diablillos", precio=120, duracion_min=30),
+            ]
+            for servicio in servicios:
+                db.add(servicio)
+            print("✅ Servicios creados")
+        else:
+            print("ℹ️ Servicios ya existen")
+        
+        db.commit()
+    except Exception as e:
+        print(f"❌ Error en seed: {e}")
+        db.rollback()
+    finally:
+        db.close()
+
+# Ejecutar seed al iniciar
+seed_database()
 
 app = FastAPI(title="Chucky Barber Shop API")
 
