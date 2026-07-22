@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
-import WhatsAppButton from "./components/WhatsAppButton"; // ← NUEVO
+import WhatsAppButton from "./components/WhatsAppButton";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
@@ -29,16 +29,18 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Navbar logueado={logueado} onLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/citas" element={<Citas />} />
-        <Route path="/admin" element={
-          logueado ? <Admin onLogout={handleLogout} /> : <Login onLogin={handleLogin} />
-        } />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-      <WhatsAppButton /> {/* ← NUEVO: aparece en todas las páginas */}
+      <div className="overflow-x-hidden min-h-screen bg-dark">
+        <Navbar logueado={logueado} onLogout={handleLogout} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/citas" element={<Citas />} />
+          <Route path="/admin" element={
+            logueado ? <Admin onLogout={handleLogout} /> : <Login onLogin={handleLogin} />
+          } />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+        <WhatsAppButton />
+      </div>
     </BrowserRouter>
   );
 }
