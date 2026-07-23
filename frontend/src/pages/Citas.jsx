@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaCalendarAlt, FaClock, FaUser, FaPhone, FaEnvelope, FaCut, FaComment, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
+import { FaCalendarAlt, FaClock, FaUser, FaPhone, FaEnvelope, FaCut, FaComment, FaCheckCircle, FaExclamationTriangle, FaWhatsapp } from "react-icons/fa";
 import api from "../axios";
 
 export default function Citas() {
@@ -83,28 +83,47 @@ export default function Citas() {
   const hoy = new Date().toISOString().split('T')[0];
 
   if (success) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4 pt-24 bg-dark">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="card-horror rounded-2xl p-8 text-center max-w-md"
-        >
-          <FaCheckCircle className="text-poison text-6xl mx-auto mb-4" />
-          <h2 className="font-creepster text-3xl text-bone mb-4">¡Cita Agendada!</h2>
-          <p className="text-bone-dark mb-6">
-            Te esperamos en Chucky Barber Shop. No olvides llegar 5 minutos antes.
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 pt-24 bg-dark">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="card-horror rounded-2xl p-8 text-center max-w-md"
+      >
+        <FaCheckCircle className="text-poison text-6xl mx-auto mb-4" />
+        <h2 className="font-creepster text-3xl text-bone mb-4">¡Cita Agendada!</h2>
+        <p className="text-bone-dark mb-6">
+          Te esperamos en Chucky Barber Shop. No olvides llegar 5 minutos antes.
+        </p>
+        
+        {/* NUEVO: Mensaje de contacto para cambios */}
+        <div className="bg-blood/10 border border-blood/30 rounded-xl p-4 mb-6">
+          <p className="text-bone text-sm mb-2">
+            ¿Necesitas cambiar o cancelar tu cita?
           </p>
-          <button
-            onClick={() => setSuccess(false)}
-            className="btn-blood px-6 py-3 rounded-lg text-bone uppercase tracking-wider"
+          <a
+            href="https://wa.me/522411401183?text=Hola,%20quiero%20modificar%20mi%20cita"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-fire hover:text-bone transition-colors text-sm flex items-center justify-center gap-2"
           >
-            Agendar otra cita
-          </button>
-        </motion.div>
-      </div>
-    );
-  }
+            <FaWhatsapp /> Escríbenos por WhatsApp
+          </a>
+          <p className="text-bone-dark text-xs mt-2">
+            o llámanos al <span className="text-fire">241 140 1183</span>
+          </p>
+        </div>
+
+        <button
+          onClick={() => setSuccess(false)}
+          className="btn-blood px-6 py-3 rounded-lg text-bone uppercase tracking-wider"
+        >
+          Agendar otra cita
+        </button>
+      </motion.div>
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen pt-24 pb-12 px-4 bg-dark relative">

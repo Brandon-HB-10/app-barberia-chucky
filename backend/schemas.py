@@ -36,6 +36,7 @@ class CitaCreate(BaseModel):
     fecha: str
     hora: str
     notas: Optional[str] = None
+    agendado_por: Optional[str] = "cliente"  # ← NUEVO
 
 class CitaResponse(BaseModel):
     id: int
@@ -47,6 +48,7 @@ class CitaResponse(BaseModel):
     hora: str
     notas: Optional[str]
     estado: str
+    agendado_por: str  # ← NUEVO
     creado_en: datetime
 
     class Config:

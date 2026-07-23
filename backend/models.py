@@ -32,4 +32,5 @@ class Cita(Base):
     hora = Column(String, nullable=False)
     notas = Column(Text)
     estado = Column(String, default="pendiente")
+    agendado_por = Column(String, default="cliente")  # ← NUEVO: "cliente" o "admin"
     creado_en = Column(DateTime, server_default=func.now())
